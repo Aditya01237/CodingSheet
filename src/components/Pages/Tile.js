@@ -4,11 +4,11 @@ import { FaYoutube, FaChevronDown, FaChevronRight, FaCheck } from "react-icons/f
 import { FaNewspaper } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
 
-const Tile = () => {
+const Tile = ({ darkMode }) => {
   const [checkedItems, setCheckedItems] = useState({});
   const [expandedSteps, setExpandedSteps] = useState(
     roadmapData.reduce((acc, step) => {
-      acc[step.step_no] = false; // Start with all steps expanded
+      acc[step.step_no] = false;
       return acc;
     }, {})
   );
@@ -28,34 +28,42 @@ const Tile = () => {
   };
 
   return (
-    <div className="mt-6 space-y-4 max-w-6xl mx-auto">
+    <div className={`mt-6 space-y-4 w-full ${darkMode ? 'dark' : ''}`}>
       {roadmapData.map((step) => (
         <div 
           key={step.step_no} 
-          className="rounded-xl overflow-hidden border border-gray-200/70 bg-white shadow-sm hover:shadow-md transition-all"
+          className={`w-full rounded-xl overflow-hidden border ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'} shadow-sm hover:shadow-md transition-all`}
         >
-          {/* Modern step header */}
+          {/* Step header */}
           <div 
             className={`flex items-center justify-between p-5 cursor-pointer transition-all ${
               expandedSteps[step.step_no] 
-                ? "bg-gradient-to-r from-blue-50/50 to-indigo-50/50 border-b border-gray-200/30" 
-                : "bg-white hover:bg-gray-50/50"
+                ? darkMode 
+                  ? "bg-gradient-to-r from-gray-700 to-gray-800 border-b border-gray-700" 
+                  : "bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200"
+                : darkMode 
+                  ? "bg-gray-800 hover:bg-gray-700" 
+                  : "bg-white hover:bg-gray-50"
             }`}
             onClick={() => toggleStep(step.step_no)}
           >
             <div className="flex items-center space-x-4">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                 expandedSteps[step.step_no] 
-                  ? "bg-blue-100 text-blue-600" 
-                  : "bg-gray-100 text-gray-600"
+                  ? darkMode 
+                    ? "bg-blue-900 text-blue-300" 
+                    : "bg-blue-100 text-blue-600"
+                  : darkMode 
+                    ? "bg-gray-700 text-gray-400" 
+                    : "bg-gray-100 text-gray-600"
               }`}>
                 {step.step_no}
               </div>
-              <h2 className="text-lg font-semibold text-gray-800">
+              <h2 className={`text-lg font-semibold ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
                 {step.step_title}
               </h2>
             </div>
-            <div className="text-gray-500">
+            <div className={darkMode ? "text-gray-400" : "text-gray-500"}>
               {expandedSteps[step.step_no] ? (
                 <FaChevronDown className="transition-transform" />
               ) : (
@@ -72,36 +80,38 @@ const Tile = () => {
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="overflow-hidden"
+                className="overflow-x-auto"
               >
-                <div className="p-4 space-y-4">
+                <div className="p-4 space-y-4 min-w-[600px] md:min-w-0">
                   {step.sub_steps.map((sub) => (
                     <div
                       key={sub.sub_step_no}
-                      className="bg-gray-50/50 rounded-lg p-4 border border-gray-200/50"
+                      className={`rounded-lg p-4 border ${darkMode ? 'border-gray-700 bg-gray-700' : 'border-gray-200 bg-gray-50'}`}
                     >
-                      <h3 className="text-md font-medium text-gray-700 mb-3 px-2">
+                      <h3 className={`text-md font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'} mb-3`}>
                         {sub.sub_step_no}. {sub.sub_step_title}
                       </h3>
 
-                      <div className="rounded-lg overflow-hidden border border-gray-200/50">
+                      <div className={`rounded-lg overflow-hidden border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
                         {/* Header row */}
-                        <div className="grid grid-cols-12 bg-gray-100/70 p-3 border-b border-gray-200/50">
-                          <div className="col-span-1 text-xs font-medium text-gray-600 uppercase tracking-wider">Done</div>
-                          <div className="col-span-5 text-xs font-medium text-gray-600 uppercase tracking-wider">Problem</div>
-                          <div className="col-span-2 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">Article</div>
-                          <div className="col-span-2 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">Video</div>
-                          <div className="col-span-2 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">Level</div>
+                        <div className={`grid grid-cols-12 p-3 border-b ${darkMode ? 'bg-gray-600 border-gray-600' : 'bg-gray-100 border-gray-200'}`}>
+                          <div className={`col-span-1 text-xs font-medium uppercase tracking-wider ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Done</div>
+                          <div className={`col-span-5 text-xs font-medium uppercase tracking-wider ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Problem</div>
+                          <div className={`col-span-2 text-center text-xs font-medium uppercase tracking-wider ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Article</div>
+                          <div className={`col-span-2 text-center text-xs font-medium uppercase tracking-wider ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Video</div>
+                          <div className={`col-span-2 text-center text-xs font-medium uppercase tracking-wider ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Level</div>
                         </div>
 
                         {/* Content rows */}
                         {sub.topics.map((topic) => (
                           <div 
                             key={topic.id} 
-                            className={`grid grid-cols-12 items-center p-3 border-b border-gray-200/30 last:border-b-0 transition-colors ${
+                            className={`grid grid-cols-12 items-center p-3 border-b ${darkMode ? 'border-gray-600 hover:bg-gray-600' : 'border-gray-200 hover:bg-gray-50'} last:border-b-0 transition-colors ${
                               checkedItems[topic.id] 
-                                ? "bg-green-300 " 
-                                : "hover:bg-gray-50"
+                                ? darkMode 
+                                  ? "bg-green-900" 
+                                  : "bg-green-100" 
+                                : ""
                             }`}
                           >
                             {/* Status checkbox */}
@@ -111,7 +121,9 @@ const Tile = () => {
                                 className={`w-5 h-5 rounded flex items-center justify-center transition-all ${
                                   checkedItems[topic.id] 
                                     ? "bg-green-500 text-white" 
-                                    : "border border-gray-300 hover:border-blue-400"
+                                    : darkMode 
+                                      ? "border border-gray-500 hover:border-blue-400" 
+                                      : "border border-gray-300 hover:border-blue-400"
                                 }`}
                               >
                                 {checkedItems[topic.id] && <FaCheck className="text-xs" />}
@@ -119,12 +131,17 @@ const Tile = () => {
                             </div>
 
                             {/* Problem title */}
-                            <div className="col-span-5">
-                              <div className={`text-sm font-medium ${
+                            <div className="col-span-5 px-2">
+                              <div className={`text-sm font-medium truncate ${
                                 checkedItems[topic.id] 
-                                  ? "text-green-700" 
-                                  : "text-gray-800"
-                              }`}>
+                                  ? darkMode 
+                                    ? "text-green-300" 
+                                    : "text-green-700"
+                                  : darkMode 
+                                    ? "text-gray-200" 
+                                    : "text-gray-800"
+                              }`}
+                              title={topic.question_title}>
                                 {topic.question_title}
                               </div>
                             </div>
@@ -136,10 +153,12 @@ const Tile = () => {
                                   href={topic.post_link}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className={`p-2 rounded-full hover:bg-gray-200/50 transition-colors ${
+                                  className={`p-2 rounded-full hover:${darkMode ? 'bg-gray-500' : 'bg-gray-200'} transition-colors ${
                                     checkedItems[topic.id] 
-                                      ? "text-green-600" 
-                                      : "text-blue-500"
+                                      ? "text-green-500" 
+                                      : darkMode 
+                                        ? "text-blue-400" 
+                                        : "text-blue-500"
                                   }`}
                                   title="Read article"
                                 >
@@ -155,10 +174,12 @@ const Tile = () => {
                                   href={topic.yt_link}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className={`p-2 rounded-full hover:bg-gray-200/50 transition-colors ${
+                                  className={`p-2 rounded-full hover:${darkMode ? 'bg-gray-500' : 'bg-gray-200'} transition-colors ${
                                     checkedItems[topic.id] 
-                                      ? "text-green-600" 
-                                      : "text-red-500"
+                                      ? "text-green-500" 
+                                      : darkMode 
+                                        ? "text-red-400" 
+                                        : "text-red-500"
                                   }`}
                                   title="Watch video"
                                 >
@@ -170,14 +191,20 @@ const Tile = () => {
                             {/* Difficulty */}
                             <div className="col-span-2 flex justify-center">
                               <span
-                                className={`px-3 py-1 rounded-full text-xs font-medium ${
+                                className={`px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
                                   checkedItems[topic.id]
-                                    ? "bg-green-600/90 text-white"
+                                    ? "bg-green-600 text-white"
                                     : topic.difficulty === 0
-                                    ? "bg-emerald-500/10 text-emerald-700"
+                                    ? darkMode 
+                                      ? "bg-emerald-900 text-emerald-300" 
+                                      : "bg-emerald-100 text-emerald-700"
                                     : topic.difficulty === 1
-                                    ? "bg-amber-500/10 text-amber-700"
-                                    : "bg-rose-500/10 text-rose-700"
+                                    ? darkMode 
+                                      ? "bg-amber-900 text-amber-300" 
+                                      : "bg-amber-100 text-amber-700"
+                                    : darkMode 
+                                      ? "bg-rose-900 text-rose-300" 
+                                      : "bg-rose-100 text-rose-700"
                                 }`}
                               >
                                 {checkedItems[topic.id] 

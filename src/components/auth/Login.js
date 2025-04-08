@@ -37,7 +37,7 @@ const Login = () => {
       className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl p-8 w-full max-w-sm shadow-xl"
     >
       <h1 className="text-3xl font-bold text-white text-center">
-        Welcome
+        Welcome To CodingSheet
       </h1>
       <p className="text-sm text-white/60 text-center mt-2">
         Sign in to continue
